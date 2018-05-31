@@ -1,4 +1,6 @@
 require 'thor'
+require 'psych'
+require 'json'
 
 module Maxy
   module Gen
@@ -6,7 +8,7 @@ module Maxy
       desc "generate ABBREVIATION", "Generates a Max Patch JSON from an emmet-style abbreviation"
       method_option :blank, aliases: "-b"
       def generate(abbr='')
-        puts 'blank' and return if options[:blank]
+        puts JSON.generate(Psych.load_file('../../assets/blank.yml')) and return if options[:blank]
       end
     end
   end
