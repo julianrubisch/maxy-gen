@@ -1,7 +1,4 @@
 require "maxy/gen/version"
+require 'maxy/gen/generator'
+require 'maxy/gen/parser'
 
-module Maxy
-  module Gen
-    # Your code goes here...
-  end
-end
