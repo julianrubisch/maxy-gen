@@ -10,6 +10,11 @@ module Maxy
       method_option :blank, aliases: "-b"
       def generate(pattern='')
         puts Generator.new.generate(nil) and return if options[:blank]
+
+        tokens = Tokenizer.new(pattern).tokenize
+        tree = Parser.new(tokens).parse
+
+        puts tree.inspect
       end
     end
   end
