@@ -14,7 +14,7 @@ module Maxy
         tokens = Tokenizer.new(pattern).tokenize
         tree = Parser.new(tokens).parse
 
-        puts Generator.new.generate('some node')
+        puts Generator.new.generate(tree)
       end
     end
   end
