@@ -2,6 +2,8 @@
 
 A commandline tool to generate max patches in an emmet-like fashion
 
+![](https://s3.eu-central-1.amazonaws.com/maxy-gen/maxygen-demo.gif)
+
 ## Installation
 
 Requires `ruby` installed, of course. This gem was built with v.2.3.3.
