@@ -1,0 +1,16 @@
+objects:
+  'cycle~':
+    maxclass: "newobj"
+    numinlets: 2
+    numoutlets: 1
+    outlettype:
+      - "signal"
+    style: ""
+    text: "cycle~"
+  'ezdac~':
+    maxclass: 'ezdac~'
+    numinlets: 2
+    numoutlets: 0
+    width: 45
+    height: 45
+    style: ''
