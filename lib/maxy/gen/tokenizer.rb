@@ -1,5 +1,6 @@
 class Tokenizer
   TOKEN_TYPES = [
+      [:arguments, /({[^{}]*})/],
       [:escaped_identifier, /(\\[\S]+)(?=[-+{}])/],
       [:identifier, /([^-+{}()\\]+)(?=[-+{}])?/],
       [:dash, /(-)/]
