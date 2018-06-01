@@ -1,6 +1,8 @@
 require "spec_helper"
 
-RSpec.describe Maxy::Gen::Parser do
+include Maxy::Gen
+
+RSpec.describe Tokenizer do
   it 'should tokenize a simple input string of type a-b-c' do
     tokens = Tokenizer.new('cycle~-*~-dac~').tokenize
     expect(tokens.map(&:type)).to eq([:identifier, :dash, :identifier, :dash, :identifier])
