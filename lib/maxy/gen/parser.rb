@@ -30,7 +30,9 @@ module Maxy
       end
 
       def parse_arguments
-        ''
+        args = consume(:arguments)
+        args.value =~ /\A{([^{}]*)}\Z/
+        $1
       end
 
       def consume(expected_type)

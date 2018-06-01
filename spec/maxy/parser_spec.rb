@@ -15,4 +15,18 @@ RSpec.describe Parser do
     expect(tree.child_nodes[0].name).to eq('*~')
     expect(tree.child_nodes[0].child_nodes[0].name).to eq('dac~')
   end
+
+  it 'should parse an object with arguments' do
+    tokens = [Token.new(:identifier, 'route'),
+              Token.new(:arguments, '{fps vol}'),
+              Token.new(:dash, '-'),
+              Token.new(:identifier, 'print'),
+              Token.new(:arguments, '{named_print}')]
+
+    tree = Parser.new(tokens).parse
+    expect(tree.name).to eq('route')
+    expect(tree.args).to eq('fps vol')
+    expect(tree.child_nodes[0].name).to eq('print')
+    expect(tree.child_nodes[0].args).to eq('named_print')
+  end
 end
