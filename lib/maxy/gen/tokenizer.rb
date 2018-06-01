@@ -1,7 +1,8 @@
 class Tokenizer
   TOKEN_TYPES = [
-      [:identifier, /[^-+{}()\\]/],
-      [:dash, /-/]
+      [:escaped_identifier, /(\\[\S]+)(?=[-+{}])/],
+      [:identifier, /([^-+{}()\\]+)(?=[-+{}])?/],
+      [:dash, /(-)/]
   ]
 
   def initialize(pattern)
@@ -18,10 +19,11 @@ class Tokenizer
 
   def tokenize_one_token
     TOKEN_TYPES.each do |type, re|
-      re = /\A(#{re})/
+      re = /\A#{re}/
       if @pattern =~ re
         value = $1
         @pattern = @pattern[value.length..-1]
+        puts @pattern
         return Token.new(type, value)
       end
     end
