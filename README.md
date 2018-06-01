@@ -44,5 +44,6 @@ Please include:
 - the patch as you'd have expected it
 
 ## Support
+This is a pure side project and depends on your support!
 
 If you'd like to support the development of `maxy-gen` and my other projects, take a look at [https://www.patreon.com/znibbles](https://www.patreon.com/znibbles)
