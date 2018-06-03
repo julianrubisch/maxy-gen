@@ -1,6 +1,8 @@
 require 'thor'
 require 'psych'
 require 'json'
+require 'fileutils'
+require 'nokogiri'
 require 'maxy/gen'
 
 module Maxy
@@ -15,6 +17,46 @@ module Maxy
         tree = Parser.new(tokens).parse
 
         puts Generator.new.generate(tree)
+      end
+
+      desc "install", "Generate max objects library from local maxref pages"
+      def install
+        library = {objects: {}}
+        maxref_xml_root = '/Applications/Max.app/Contents/Resources/C74/docs/refpages'
+
+        print "Path to Max Refpages [#{maxref_xml_root}]:"
+        case choice = $stdin.gets.chomp
+        when ''
+        when /\A.+/i
+          maxref_xml_root = choice
+        else fail "cannot understand `#{choice}'"
+        end
+
+        Dir.foreach(maxref_xml_root) do |mod|
+          next if mod =~ /\.\.?/
+          if File.directory?("#{maxref_xml_root}/#{mod}")
+            Dir.glob("#{maxref_xml_root}/#{mod}/*.maxref.xml").each do |maxref|
+              doc = File.open(maxref) { |f| Nokogiri::XML(f) }
+
+              obj_name = doc.xpath('//c74object/@name').to_s
+              inlets = doc.xpath('//inlet')
+              outlets = doc.xpath('//outlet')
+
+              library[:objects][obj_name] = {}
+              library[:objects][obj_name]['maxclass'] = 'newobj'
+              library[:objects][obj_name]['style'] = ''
+              library[:objects][obj_name]['text'] = obj_name
+              library[:objects][obj_name]['numinlets'] = inlets.size
+              library[:objects][obj_name]['numoutlets'] = outlets.size
+            end
+          end
+        end
+
+        unless File.directory?("#{ENV['HOME']}/.maxy-gen")
+          FileUtils.mkdir_p("#{ENV['HOME']}/.maxy-gen")
+        end
+        File.open("#{ENV['HOME']}/.maxy-gen/library.yml", 'w') {|f| f.write library.to_yaml }
+
       end
     end
   end
