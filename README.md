@@ -11,6 +11,18 @@ Requires `ruby` installed, of course. This gem was built with v.2.3.3.
 Install the gem:
 
     $ gem install maxy-gen       
+    
+This version depends on your local Max installation. Install max object definitions like so:
+
+    $ maxy-gen install
+    
+Or simply
+
+    $ maxy-gen i
+    
+You will be asked for the path to your `refpages` directory. Just hit Enter if you installed Max in your Applications folder.
+
+Note: This is totally untested on Windows!    
 
 ## Usage
 
@@ -18,6 +30,7 @@ Use an [emmet](https://emmet.io/)-like pattern to generate a max patch, e.g.
 
     $ maxy-gen generate 'cycle~{440.}-*~{0.2}-ezdac~' > test.maxpat
     
+(or shorter, `maxy-gen g ...`)
         
 ... and open it in Max. 
 
@@ -26,21 +39,27 @@ As of now you can use
 - `-` dashes to indicate patch chords 
 - `{}` curly braces to denote arguments passed to objects
 
-This gem is under heavy development and needs a library of max objects to function. 
+A couple of objects need escaping (with `\`), because some characters are taken, obviously. These are:
 
-This early prototype supports
-- `cycle~`
-- `ezdac~`
-- `sig~`
-- `*~` 
+- `\-`
+- `\+`
+- `\*`
+- `\-~`
+- `\+=~`
+- `\+~`
+- `\*~`
+
      
-- (later, you will be able to use escaped identifiers, such as `\-~`, because `-{}` are taken, obviously )     
+
+This gem is under heavy development!
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/julianrubisch/maxy-gen.
 
 Please include:
+- your platform
+- your ruby version
 - a description of what didn't work
 - the patch produced by maxy-gen
 - the patch as you'd have expected it
