@@ -55,6 +55,11 @@ module Maxy
           end
         end
 
+        library[:objects].select { |k,v| k.match?(/\A^[-+*{}].*/)  }.each do |k,v|
+          key = "\\#{k}"
+          library[:objects][key] = library[:objects].delete k
+        end
+
         unless File.directory?("#{ENV['HOME']}/.maxy-gen")
           FileUtils.mkdir_p("#{ENV['HOME']}/.maxy-gen")
         end
