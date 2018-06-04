@@ -29,4 +29,12 @@ RSpec.describe Parser do
     expect(tree.child_nodes[0].name).to eq('print')
     expect(tree.child_nodes[0].args).to eq('named_print')
   end
+
+  it 'should raise a parsing error when an unknown object is passed' do
+    tokens = [Token.new(:identifier, 'foo~'),
+              Token.new(:dash, '-'),
+              Token.new(:escaped_identifier, '\*~')]
+
+    expect { Parser.new(tokens).parse }.to raise_error(RuntimeError)
+  end
 end

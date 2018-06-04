@@ -2,6 +2,9 @@ module Maxy
   module Gen
     class Parser
       def initialize(tokens)
+        raise RuntimeError.new('No object definitions were found. please run `maxy-gen install` first') unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
+
+        @library = Psych.load_file("#{ENV['HOME']}/.maxy-gen/library.yml").freeze
         @tokens = tokens
       end
 
@@ -19,6 +22,9 @@ module Maxy
             obj_name = consume(:escaped_identifier).value
           end
         end
+
+        raise RuntimeError.new("Could not find #{obj_name} in object definitions.") if @library[:objects][obj_name].nil?
+
         arguments = ''
         if peek(:arguments)
           arguments = parse_arguments
