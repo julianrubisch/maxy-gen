@@ -8,6 +8,9 @@ require 'maxy/gen'
 module Maxy
   module Gen
     class CLI < Thor
+      map "g" => :generate
+      map "i" => :install
+
       desc "generate PATTERN", "Generates a Max Patch JSON from an emmet-style pattern"
       method_option :blank, aliases: "-b"
       def generate(pattern='')
