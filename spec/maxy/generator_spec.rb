@@ -16,14 +16,14 @@ RSpec.describe Generator do
   end
 
   it 'should generate two boxes and a line' do
-    tree = ObjectNode.new('sig~', '100.', [ObjectNode.new('*~', '0.5', [])])
+    tree = ObjectNode.new('sig~', '100.', [ObjectNode.new('\*~', '0.5', [ObjectNode.new('dac~', '', [])])])
     generated = Generator.new.generate(tree)
 
     expect(JSON.parse(generated)['patcher']['boxes']).not_to be_empty
     expect(JSON.parse(generated)['patcher']['lines']).not_to be_empty
 
-    expect(JSON.parse(generated)['patcher']['boxes'].size).to eq(3)
-    expect(JSON.parse(generated)['patcher']['lines'].size).to eq(2)
+    expect(JSON.parse(generated)['patcher']['boxes'].size).to eq(4)
+    expect(JSON.parse(generated)['patcher']['lines'].size).to eq(3)
   end
 
 end

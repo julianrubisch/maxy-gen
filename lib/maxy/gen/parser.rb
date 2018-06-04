@@ -12,7 +12,13 @@ module Maxy
       def parse_obj(obj_node=nil)
         return if @tokens.length == 0
 
-        obj_name = consume(:identifier).value
+        if peek(:identifier)
+          obj_name = consume(:identifier).value
+        else
+          if peek(:escaped_identifier)
+            obj_name = consume(:escaped_identifier).value
+          end
+        end
         arguments = ''
         if peek(:arguments)
           arguments = parse_arguments
