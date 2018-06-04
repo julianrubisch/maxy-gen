@@ -57,6 +57,8 @@ module Maxy
         end
         File.open("#{ENV['HOME']}/.maxy-gen/library.yml", 'w') {|f| f.write library.to_yaml }
 
+        print "Successfully installed max object definitions."
+
       end
     end
   end
