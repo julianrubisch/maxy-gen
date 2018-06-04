@@ -6,13 +6,13 @@ RSpec.describe Parser do
   it 'should parse a simple input string of type a-b-c' do
     tokens = [Token.new(:identifier, 'cycle~'),
               Token.new(:dash, '-'),
-              Token.new(:identifier, '*~'),
+              Token.new(:escaped_identifier, '\*~'),
               Token.new(:dash, '-'),
               Token.new(:identifier, 'dac~')]
 
     tree = Parser.new(tokens).parse
     expect(tree.name).to eq('cycle~')
-    expect(tree.child_nodes[0].name).to eq('*~')
+    expect(tree.child_nodes[0].name).to eq('\*~')
     expect(tree.child_nodes[0].child_nodes[0].name).to eq('dac~')
   end
 
@@ -28,5 +28,13 @@ RSpec.describe Parser do
     expect(tree.args).to eq('fps vol')
     expect(tree.child_nodes[0].name).to eq('print')
     expect(tree.child_nodes[0].args).to eq('named_print')
+  end
+
+  it 'should raise a parsing error when an unknown object is passed' do
+    tokens = [Token.new(:identifier, 'foo~'),
+              Token.new(:dash, '-'),
+              Token.new(:escaped_identifier, '\*~')]
+
+    expect { Parser.new(tokens).parse }.to raise_error(RuntimeError)
   end
 end
