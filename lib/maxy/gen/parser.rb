@@ -62,26 +62,26 @@ module Maxy
 
         obj_name
       end
-    end
 
-    def parse_plus(obj_node)
-      if peek(:plus)
-        consume(:plus)
-        sibling_obj_name = parse_identifier
-        sibling_args = parse_arguments || ''
-        sibling_obj_node = ObjectNode.new(sibling_obj_name, sibling_args, [])
-        obj_node.child_nodes << sibling_obj_node
+      def parse_plus(obj_node)
+        if peek(:plus)
+          consume(:plus)
+          sibling_obj_name = parse_identifier
+          sibling_args = parse_arguments || ''
+          sibling_obj_node = ObjectNode.new(sibling_obj_name, sibling_args, [])
+          obj_node.child_nodes << sibling_obj_node
 
-        parse_plus(obj_node)
+          parse_plus(obj_node)
 
-        parse_dash(sibling_obj_node)
+          parse_dash(sibling_obj_node)
+        end
       end
-    end
 
-    def parse_dash(obj_node)
-      if peek(:dash)
-        consume(:dash)
-        parse_obj(obj_node)
+      def parse_dash(obj_node)
+        if peek(:dash)
+          consume(:dash)
+          parse_obj(obj_node)
+        end
       end
     end
 
