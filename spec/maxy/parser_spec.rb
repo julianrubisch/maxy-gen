@@ -45,10 +45,17 @@ RSpec.describe Parser do
               Token.new(:arguments, '{5}'),
               Token.new(:plus, '+'),
               Token.new(:identifier, 'int'),
-              Token.new(:arguments, '{7}')]
+              Token.new(:arguments, '{7}'),
+              Token.new(:plus, '+'),
+              Token.new(:identifier, 'float'),
+              Token.new(:arguments, '{400.}'),
+              Token.new(:dash, '-'),
+              Token.new(:identifier, 'cycle~')]
 
     tree = Parser.new(tokens).parse
+    puts tree.inspect
     expect(tree.name).to eq('loadbang')
-    expect(tree.child_nodes.size).to eq(2)
+    expect(tree.child_nodes.size).to eq(3)
+    expect(tree.child_nodes[2].child_nodes.size).to eq(1)
   end
 end

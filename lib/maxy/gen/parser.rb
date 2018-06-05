@@ -22,17 +22,9 @@ module Maxy
         new_obj_node = ObjectNode.new(obj_name, arguments, [])
         obj_node.child_nodes << new_obj_node unless obj_node.nil?
 
-        if peek(:plus)
-          consume(:plus)
-          sibling_obj_name = parse_identifier
-          sibling_args = parse_arguments || ''
-          obj_node.child_nodes << ObjectNode.new(sibling_obj_name, sibling_args, [])
-        end
+        parse_plus(obj_node)
 
-        if peek(:dash)
-          consume(:dash)
-          parse_obj(new_obj_node)
-        end
+        parse_dash(new_obj_node)
 
         new_obj_node
       end
@@ -58,8 +50,6 @@ module Maxy
         @tokens.length > 0 && @tokens.fetch(0).type == expected_type
       end
 
-      private
-
       def parse_identifier
         if peek(:identifier)
           obj_name = consume(:identifier).value
@@ -71,6 +61,27 @@ module Maxy
         raise RuntimeError.new("Could not find #{obj_name} in object definitions.") if @library[:objects][obj_name].nil?
 
         obj_name
+      end
+    end
+
+    def parse_plus(obj_node)
+      if peek(:plus)
+        consume(:plus)
+        sibling_obj_name = parse_identifier
+        sibling_args = parse_arguments || ''
+        sibling_obj_node = ObjectNode.new(sibling_obj_name, sibling_args, [])
+        obj_node.child_nodes << sibling_obj_node
+
+        parse_plus(obj_node)
+
+        parse_dash(sibling_obj_node)
+      end
+    end
+
+    def parse_dash(obj_node)
+      if peek(:dash)
+        consume(:dash)
+        parse_obj(obj_node)
       end
     end
 
