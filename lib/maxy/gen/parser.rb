@@ -15,23 +15,19 @@ module Maxy
       def parse_obj(obj_node=nil)
         return if @tokens.length == 0
 
-        if peek(:identifier)
-          obj_name = consume(:identifier).value
-        else
-          if peek(:escaped_identifier)
-            obj_name = consume(:escaped_identifier).value
-          end
-        end
+        obj_name = parse_identifier
 
-        raise RuntimeError.new("Could not find #{obj_name} in object definitions.") if @library[:objects][obj_name].nil?
-
-        arguments = ''
-        if peek(:arguments)
-          arguments = parse_arguments
-        end
+        arguments = parse_arguments || ''
 
         new_obj_node = ObjectNode.new(obj_name, arguments, [])
         obj_node.child_nodes << new_obj_node unless obj_node.nil?
+
+        if peek(:plus)
+          consume(:plus)
+          sibling_obj_name = parse_identifier
+          sibling_args = parse_arguments || ''
+          obj_node.child_nodes << ObjectNode.new(sibling_obj_name, sibling_args, [])
+        end
 
         if peek(:dash)
           consume(:dash)
@@ -42,9 +38,11 @@ module Maxy
       end
 
       def parse_arguments
-        args = consume(:arguments)
-        args.value =~ /\A{([^{}]*)}\Z/
-        $1
+        if peek(:arguments)
+          args = consume(:arguments)
+          args.value =~ /\A{([^{}]*)}\Z/
+          $1
+        end
       end
 
       def consume(expected_type)
@@ -58,6 +56,21 @@ module Maxy
 
       def peek(expected_type)
         @tokens.length > 0 && @tokens.fetch(0).type == expected_type
+      end
+
+      private
+
+      def parse_identifier
+        if peek(:identifier)
+          obj_name = consume(:identifier).value
+        else
+          if peek(:escaped_identifier)
+            obj_name = consume(:escaped_identifier).value
+          end
+        end
+        raise RuntimeError.new("Could not find #{obj_name} in object definitions.") if @library[:objects][obj_name].nil?
+
+        obj_name
       end
     end
 
