@@ -5,6 +5,7 @@ module Maxy
           [:arguments, /({[^{}]*})/],
           [:escaped_identifier, /(\\[\S][^-+{}()\\]+)(?=[-+*{}])?/],
           [:identifier, /([^-+{}()\\]+)(?=[-+*{}])?/],
+          [:plus, /(\+)/],
           [:dash, /(-)/]
       ]
 
