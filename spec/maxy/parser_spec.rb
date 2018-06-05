@@ -37,4 +37,18 @@ RSpec.describe Parser do
 
     expect { Parser.new(tokens).parse }.to raise_error(RuntimeError)
   end
+
+  it 'should parse a plus for path splitting' do
+    tokens = [Token.new(:identifier, 'loadbang'),
+              Token.new(:dash, '-'),
+              Token.new(:identifier, 'int'),
+              Token.new(:arguments, '{5}'),
+              Token.new(:plus, '+'),
+              Token.new(:identifier, 'int'),
+              Token.new(:arguments, '{7}')]
+
+    tree = Parser.new(tokens).parse
+    expect(tree.name).to eq('loadbang')
+    expect(tree.child_nodes.size).to eq(2)
+  end
 end
