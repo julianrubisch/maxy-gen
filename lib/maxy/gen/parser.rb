@@ -85,6 +85,6 @@ module Maxy
       end
     end
 
-    ObjectNode = Struct.new(:name, :args, :child_nodes)
+    ObjectNode = Struct.new(:name, :args, :child_nodes, :x_rank, :y_rank)
   end
 end
