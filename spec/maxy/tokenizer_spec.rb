@@ -31,4 +31,10 @@ RSpec.describe Tokenizer do
     expect(tokens.map(&:type)).to eq([:identifier, :dash, :escaped_identifier, :arguments])
     expect(tokens.map(&:value)).to eq(%w(sig~ - \*~ {0.1}))
   end
+
+  it 'should tokenize a plus path split' do
+    tokens = Tokenizer.new('loadbang-int{5}+int{7}').tokenize
+    expect(tokens.map(&:type)).to eq([:identifier, :dash, :identifier, :arguments, :plus, :identifier, :arguments])
+    expect(tokens.map(&:value)).to eq(%w(loadbang - int {5} + int {7}))
+  end
 end
