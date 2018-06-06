@@ -4,9 +4,9 @@ require 'psych'
 module Maxy
   module Gen
     class Generator
-      TEMPLATE = Psych.load_file(File.join(__dir__, '../../../assets/blank.yml')).freeze
       OFFSET_X = 20
       OFFSET_Y = 20
+      STEP_X = 70
       STEP_Y = 40
       HEIGHT = 22
       WIDTH = 50
@@ -17,7 +17,8 @@ module Maxy
         raise RuntimeError.new('No object definitions were found. please run `maxy-gen install` first') unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
 
         @object_count = 1
-        @patch = TEMPLATE.freeze
+        @y_rank = 1
+        @patch = Psych.load_file(File.join(__dir__, '../../../assets/blank.yml')).freeze
         @library = Psych.load_file("#{ENV['HOME']}/.maxy-gen/library.yml").freeze
       end
 
@@ -28,21 +29,25 @@ module Maxy
         JSON.generate(@patch)
       end
 
-      def generate_node(node, id)
-        @patch['patcher']['boxes'] << make_box(node, id)
-        @object_count += 1
+      def generate_node(node, id, index_in_collection=0)
+        @patch['patcher']['boxes'] << make_box(node, id, @y_rank, index_in_collection)
+        @object_count += 1                          
+        unless index_in_collection > 0
+          @y_rank += 1 
+        end
 
-        node.child_nodes.each do |child_node|
+        node.child_nodes.each_with_index do |child_node, child_index|
           child_id = "obj_#{@object_count}"
-          generate_node(child_node, child_id)
+          generate_node(child_node, child_id, child_index)
           @patch['patcher']['lines'] << make_line(id, child_id)
         end
+
       end
 
-      def make_box(node, id)
+      def make_box(node, id, y_rank, x_rank=0)
         box = @library[:objects][node.name]
         box['id'] = id
-        box['patching_rect'] = [OFFSET_X, OFFSET_Y + @object_count * STEP_Y, box['width'] || WIDTH, box['height'] || HEIGHT]
+        box['patching_rect'] = [OFFSET_X + x_rank * STEP_X, OFFSET_Y + y_rank * STEP_Y, box['width'] || WIDTH, box['height'] || HEIGHT]
         unless box['text'].nil?
           box['text'] += " #{node.args}"
         end
