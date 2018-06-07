@@ -53,9 +53,31 @@ RSpec.describe Parser do
               Token.new(:identifier, 'cycle~')]
 
     tree = Parser.new(tokens).parse
-    puts tree.inspect
     expect(tree.name).to eq('loadbang')
     expect(tree.child_nodes.size).to eq(3)
     expect(tree.child_nodes[2].child_nodes.size).to eq(1)
+  end
+
+  it 'should parse a simple group' do
+    tokens = [Token.new(:identifier, 'inlet'),
+              Token.new(:dash, '-'),
+              Token.new(:oparen, '('),
+              Token.new(:escaped_identifier, '\*'),
+              Token.new(:dash, '-'),
+              Token.new(:identifier, 'outlet'),
+              Token.new(:cparen, ')'),
+              Token.new(:plus, '+'),
+              Token.new(:oparen, '('),
+              Token.new(:identifier, 'trigger'),
+              Token.new(:dash, '-'),
+              Token.new(:identifier, 'outlet'),
+              Token.new(:cparen, ')')]
+    tree = Parser.new(tokens).parse
+
+    puts tree.inspect
+    expect(tree.name).to eq('inlet')
+    expect(tree.child_nodes.size).to eq(3)
+    expect(tree.child_nodes[1].child_nodes.size).to eq(2)
+    expect(tree.child_nodes[2].child_nodes.size).to eq(2)
   end
 end

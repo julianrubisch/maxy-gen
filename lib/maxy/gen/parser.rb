@@ -22,6 +22,8 @@ module Maxy
         new_obj_node = ObjectNode.new(obj_name, arguments, [])
         obj_node.child_nodes << new_obj_node unless obj_node.nil?
 
+        parse_group
+
         parse_plus(obj_node)
 
         parse_dash(new_obj_node)
@@ -34,6 +36,17 @@ module Maxy
           args = consume(:arguments)
           args.value =~ /\A{([^{}]*)}\Z/
           $1
+        end
+      end
+
+      def parse_group
+        if peek(:oparen)
+          consume(:oparen)
+
+          until peek(:cparen) do
+
+          end
+          consume(:cparen)
         end
       end
 
