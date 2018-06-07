@@ -37,4 +37,10 @@ RSpec.describe Tokenizer do
     expect(tokens.map(&:type)).to eq([:identifier, :dash, :identifier, :arguments, :plus, :identifier, :arguments])
     expect(tokens.map(&:value)).to eq(%w(loadbang - int {5} + int {7}))
   end
+
+  it 'should tokenize open and closed parens' do
+    tokens = Tokenizer.new('inlet-(\*-outlet)+(trigger-outlet)').tokenize
+    expect(tokens.map(&:type)).to eq([:identifier, :dash, :oparen, :escaped_identifier, :dash, :identifier, :cparen, :plus, :oparen, :identifier, :dash, :identifier, :cparen])
+    expect(tokens.map(&:value)).to eq(%w(inlet - ( \* - outlet ) + ( trigger - outlet )))
+  end
 end
