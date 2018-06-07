@@ -9,24 +9,33 @@ module Maxy
       end
 
       def parse
-        parse_obj
+        parse_group_or_obj
       end
 
-      def parse_obj(obj_node=nil)
-        return if @tokens.length == 0
-
-        obj_name = parse_identifier
-
-        arguments = parse_arguments || ''
-
-        new_obj_node = ObjectNode.new(obj_name, arguments, [])
-        obj_node.child_nodes << new_obj_node unless obj_node.nil?
-
+      def parse_group_or_obj(obj_node=nil)
         parse_group
 
         parse_plus(obj_node)
 
-        parse_dash(new_obj_node)
+        node = parse_obj(obj_node)
+
+        parse_plus(obj_node)
+
+        parse_dash(node)
+
+        node
+      end
+
+      def parse_obj(parent_node=nil)
+        return if @tokens.length == 0
+
+        obj_name = parse_identifier
+        puts obj_name
+
+        arguments = parse_arguments || ''
+
+        new_obj_node = ObjectNode.new(obj_name, arguments, [])
+        parent_node.child_nodes << new_obj_node unless parent_node.nil?
 
         new_obj_node
       end
@@ -42,11 +51,13 @@ module Maxy
       def parse_group
         if peek(:oparen)
           consume(:oparen)
+          puts 'after oparen'
 
-          until peek(:cparen) do
+          parse_group_or_obj
 
-          end
           consume(:cparen)
+          puts 'after cparen'
+          puts @tokens.inspect
         end
       end
 
@@ -66,11 +77,12 @@ module Maxy
       def parse_identifier
         if peek(:identifier)
           obj_name = consume(:identifier).value
-        else
-          if peek(:escaped_identifier)
-            obj_name = consume(:escaped_identifier).value
-          end
         end
+
+        if peek(:escaped_identifier)
+          obj_name = consume(:escaped_identifier).value
+        end
+
         raise RuntimeError.new("Could not find #{obj_name} in object definitions.") if @library[:objects][obj_name].nil?
 
         obj_name
@@ -93,7 +105,7 @@ module Maxy
       def parse_dash(obj_node)
         if peek(:dash)
           consume(:dash)
-          parse_obj(obj_node)
+          parse_group_or_obj(obj_node)
         end
       end
     end
