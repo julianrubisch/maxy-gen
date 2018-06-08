@@ -21,10 +21,10 @@ module Maxy
         @library = Psych.load_file("#{ENV['HOME']}/.maxy-gen/library.yml").freeze
       end
 
-      def generate(node)
-        return JSON.generate(@patch) if node.nil?
+      def generate(root_node)
+        return JSON.generate(@patch) if root_node.nil?
 
-        node = align_tree(node)
+        node = align_tree(root_node.child_nodes[0])
         generate_node(node, "obj_#{@object_count}")
         JSON.generate(@patch)
       end

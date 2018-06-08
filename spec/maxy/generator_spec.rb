@@ -16,7 +16,13 @@ RSpec.describe Generator do
   end
 
   it 'should generate three boxes and two lines' do
-    tree = ObjectNode.new('sig~', '100.', [ObjectNode.new('\*~', '0.5', [ObjectNode.new('dac~', '', [])])])
+    tree = RootNode.new([
+                            ObjectNode.new('sig~', '100.', [
+                                ObjectNode.new('\*~', '0.5', [
+                                    ObjectNode.new('dac~', '', [])
+                                ])
+                            ])
+                        ])
     generator = Generator.new
     generated = generator.generate(tree)
 
@@ -28,7 +34,14 @@ RSpec.describe Generator do
   end
 
   it 'should generate three boxes and two lines out of a split path' do
-    tree = ObjectNode.new('loadbang', '100.', [ObjectNode.new('int', '1', []), ObjectNode.new('float', '5.2', [ObjectNode.new('print', '', [])])])
+    tree = RootNode.new([
+                            ObjectNode.new('loadbang', '100.', [
+                                ObjectNode.new('int', '1', []),
+                                ObjectNode.new('float', '5.2', [
+                                    ObjectNode.new('print', '', [])
+                                ])
+                            ])
+                        ])
     generator = Generator.new
     generated = generator.generate(tree)
 
