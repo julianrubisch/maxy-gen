@@ -11,7 +11,11 @@ module Maxy
       end
 
       def parse(parent_node=@tree, closing_group=false)
-        unless closing_group
+        if closing_group
+          if peek(:dash) || peek(:identifier) || peek(:escaped_identifier)
+            raise RuntimeError.new("Parsing Error: only + is allowed after a ) closing a group.")
+          end
+        else
           parse_begin_group parent_node
           child_node = parse_identifier parent_node
           parse_dash child_node

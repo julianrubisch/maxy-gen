@@ -85,4 +85,18 @@ RSpec.describe Parser do
     expect(tree.child_nodes[0].child_nodes[1].child_nodes.size).to eq(2)
   end
 
+  it 'should reject everything but a + after a group' do
+    tokens = [Token.new(:identifier, 'inlet'),
+              Token.new(:dash, '-'),
+              Token.new(:oparen, '('),
+              Token.new(:escaped_identifier, '\*'),
+              Token.new(:dash, '-'),
+              Token.new(:identifier, 'outlet'),
+              Token.new(:cparen, ')'),
+              Token.new(:dash, '-'),
+              Token.new(:identifier, 'print')]
+
+    expect { Parser.new(tokens).parse }.to raise_error(RuntimeError)
+  end
+
 end
