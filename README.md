@@ -28,7 +28,7 @@ Note: This is totally untested on Windows!
 
 Use an [emmet](https://emmet.io/)-like pattern to generate a max patch, e.g.
 
-    $ maxy-gen generate 'cycle~{440.}-*~{0.2}-ezdac~' > test.maxpat
+    $ maxy-gen generate 'inlet-(\-{3.14}-print)+(trigger{b}-(outlet+print))' > complex_grouping.maxpat
     
 (or shorter, `maxy-gen g ...`)
         
@@ -38,6 +38,8 @@ As of now you can use
 
 - `-` dashes to indicate patch chords 
 - `{}` curly braces to denote arguments passed to objects
+- `+` to denote sibling objects
+- `(...)` to group objects together (see demo above)
 
 A couple of objects need escaping (with `\`), because some characters are taken, obviously. These are:
 
