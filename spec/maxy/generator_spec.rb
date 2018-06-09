@@ -53,7 +53,7 @@ RSpec.describe Generator do
     expect(JSON.parse(generated)['patcher']['lines'].select { |l| l['patchline']['source'][0] == 'obj_1' unless l.nil? }.size).to eq(2)
   end
 
-  it 'should generate only unique IDs' do
+  it 'should generate only unique IDs when generating two objects of the same type' do
     tree = RootNode.new([
                             ObjectNode.new('inlet', '', [
                                 ObjectNode.new('\*', '1.', [
@@ -66,7 +66,6 @@ RSpec.describe Generator do
                         ])
     generator = Generator.new
     generated = generator.generate(tree)
-
 
     duplicate_keys = JSON.parse(generated)['patcher']['boxes'].group_by { |box| box['id'] }.select { |k, v| v.size > 1 }
 
