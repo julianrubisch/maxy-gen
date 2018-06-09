@@ -17,15 +17,17 @@ module Maxy
         raise RuntimeError.new('No object definitions were found. please run `maxy-gen install` first') unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
 
         @object_count = 1
-        @patch = Psych.load_file(File.join(__dir__, '../../../assets/blank.yml')).freeze
-        @library = Psych.load_file("#{ENV['HOME']}/.maxy-gen/library.yml").freeze
+        @patch = Psych.load_file(File.join(__dir__, '../../../assets/blank.yml')).dup
+        @library = Psych.load_file("#{ENV['HOME']}/.maxy-gen/library.yml").dup
       end
 
-      def generate(node)
-        return JSON.generate(@patch) if node.nil?
+      def generate(root_node)
+        return JSON.generate(@patch) if root_node.nil?
 
-        node = align_tree(node)
+        node = align_tree(root_node.child_nodes[0])
         generate_node(node, "obj_#{@object_count}")
+        @patch['patcher']['boxes'].compact!
+        @patch['patcher']['lines'].compact!
         JSON.generate(@patch)
       end
 
@@ -38,13 +40,12 @@ module Maxy
           generate_node(child_node, child_id)
           @patch['patcher']['lines'] << make_line(id, child_id)
         end
-
       end
 
       def make_box(node, id)
-        box = @library[:objects][node.name]
+        box = @library[:objects][node.name].dup
         box['id'] = id
-        box['patching_rect'] = [OFFSET_X + node.x_rank * STEP_X, OFFSET_Y + node.y_rank * STEP_Y, box['width'] || WIDTH, box['height'] || HEIGHT]
+        box['patching_rect'] = [OFFSET_X + (node.x_rank - 1) * STEP_X, OFFSET_Y + (node.y_rank - 1) * STEP_Y, box['width'] || WIDTH, box['height'] || HEIGHT]
         unless box['text'].nil?
           box['text'] += " #{node.args}"
         end
@@ -70,8 +71,6 @@ module Maxy
         node
       end
     end
-    #
-    # Box = Struct.new( :id, :node, :x_rank, :y_rank)
 
   end
 end
