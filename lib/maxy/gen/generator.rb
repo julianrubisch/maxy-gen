@@ -26,6 +26,8 @@ module Maxy
 
         node = align_tree(root_node.child_nodes[0])
         generate_node(node, "obj_#{@object_count}")
+        @patch['patcher']['boxes'].compact!
+        @patch['patcher']['lines'].compact!
         JSON.generate(@patch)
       end
 
