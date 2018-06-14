@@ -18,6 +18,7 @@ module Maxy
         else
           parse_begin_group parent_node
           child_node = parse_identifier parent_node
+          parse_equals child_node
           parse_dash child_node
         end
 
@@ -92,9 +93,21 @@ module Maxy
           parse(obj_node)
         end
       end
+
+      def parse_equals(obj_node)
+        if peek(:equals)
+          consume(:equals)
+          obj_node.flags << :connect_children_individually
+          parse(obj_node)
+        end
+      end
     end
 
-    ObjectNode = Struct.new(:name, :args, :child_nodes, :x_rank, :y_rank)
+    ObjectNode = Struct.new(:name, :args, :child_nodes, :x_rank, :y_rank, :flags) do
+      def initialize(name, args, child_nodes, x_rank=0, y_rank=0, flags=[])
+        super
+      end
+    end
     RootNode = Struct.new(:child_nodes)
 
   end

@@ -115,6 +115,8 @@ RSpec.describe Parser do
     expect(tree.child_nodes[0].name).to eq('trigger')
     expect(tree.child_nodes[0].child_nodes.size).to eq(3)
     expect(tree.child_nodes[0].flags).to include(:connect_children_individually)
+    expect(tree.child_nodes[0].child_nodes[0]).to eq(ObjectNode.new('int', '', [], 0, 0, []))
+    expect(tree.child_nodes[0].child_nodes[2]).to eq(ObjectNode.new('int', '', [], 0, 0, []))
   end
 
 end
