@@ -99,4 +99,20 @@ RSpec.describe Parser do
     expect { Parser.new(tokens).parse }.to raise_error(RuntimeError)
   end
 
+  it 'should parse a row to multiple expression (=) ' do
+    tokens = [Token.new(:identifier, 'trigger'),
+              Token.new(:arguments, '{b b b}'),
+              Token.new(:equals, '='),
+              Token.new(:oparen, '('),
+              Token.new(:identifier, 'int'),
+              Token.new(:plus, '+'),
+              Token.new(:identifier, 'int'),
+              Token.new(:plus, '+'),
+              Token.new(:identifier, 'int'),
+              Token.new(:cparen, ')')]
+    tree = Parser.new(tokens).parse
+
+    expect(tree.child_nodes[0].name).to eq('trigger')
+  end
+
 end
