@@ -113,6 +113,8 @@ RSpec.describe Parser do
     tree = Parser.new(tokens).parse
 
     expect(tree.child_nodes[0].name).to eq('trigger')
+    expect(tree.child_nodes[0].child_nodes.size).to eq(3)
+    expect(tree.child_nodes[0].flags).to include(:connect_children_individually)
   end
 
 end

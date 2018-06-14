@@ -3,11 +3,12 @@ module Maxy
     class Tokenizer
       TOKEN_TYPES = [
           [:arguments, /({[^{}]*})/],
-          [:escaped_identifier, /(\\[\S][^-+{}()\\]*)(?=[-+*{}])?/],
-          [:identifier, /([^-+{}()\\]+)(?=[-+*{}])?/],
+          [:escaped_identifier, /(\\[\S][^-+={}()\\]*)(?=[-+=*{}])?/],
+          [:identifier, /([^-+={}()\\]+)(?=[-+=*{}])?/],
           [:oparen, /(\()/],
           [:cparen, /(\))/],
           [:plus, /(\+)/],
+          [:equals, /(=)/],
           [:dash, /(-)/]
       ]
 
