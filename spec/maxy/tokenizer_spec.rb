@@ -43,4 +43,10 @@ RSpec.describe Tokenizer do
     expect(tokens.map(&:type)).to eq([:identifier, :dash, :oparen, :escaped_identifier, :dash, :identifier, :cparen, :plus, :oparen, :identifier, :dash, :identifier, :cparen])
     expect(tokens.map(&:value)).to eq(%w(inlet - ( \* - outlet ) + ( trigger - outlet )))
   end
+
+  it 'should tokenize an equals sign' do
+    tokens = Tokenizer.new('trigger{b b b}=(int+int+int)').tokenize
+    expect(tokens.map(&:type)).to eq([:identifier, :arguments, :equals, :oparen, :identifier, :plus, :identifier, :plus, :identifier, :cparen])
+    expect(tokens.map(&:value)).to eq(%w(trigger {b\ b\ b} = ( int + int + int ) ))
+  end
 end

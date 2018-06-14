@@ -72,5 +72,26 @@ RSpec.describe Generator do
     expect(duplicate_keys).to be_empty
   end
 
+  it 'should connect children individually if asked to do so' do
+    tree = RootNode.new([
+                            ObjectNode.new('trigger', 'b b b', [
+                                ObjectNode.new('int', '', []),
+                                ObjectNode.new('int', '', []),
+                                ObjectNode.new('int', '', [])
+                            ], 0, 0, [:connect_children_individually])
+                        ])
+    generator = Generator.new
+    generated = generator.generate(tree)
 
+    lines = JSON.parse(generated)['patcher']['lines']
+
+    expect(JSON.parse(generated)['patcher']['boxes']).not_to be_empty
+    expect(lines).not_to be_empty
+
+    expect(JSON.parse(generated)['patcher']['boxes'].size).to eq(4)
+    expect(lines.size).to eq(3)
+    expect(lines[0]['patchline']['source']).to eq(['obj_1', 0])
+    expect(lines[1]['patchline']['source']).to eq(['obj_1', 1])
+    expect(lines[2]['patchline']['source']).to eq(['obj_1', 2])
+  end
 end
