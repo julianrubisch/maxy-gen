@@ -35,10 +35,14 @@ module Maxy
         @patch['patcher']['boxes'] << make_box(node, id)
         @object_count += 1
 
-        node.child_nodes.each do |child_node|
+        node.child_nodes.each_with_index do |child_node, index|
           child_id = "obj_#{@object_count}"
           generate_node(child_node, child_id)
-          @patch['patcher']['lines'] << make_line(id, child_id)
+          if node.flags.include? :connect_children_individually
+            @patch['patcher']['lines'] << make_line(id, child_id, index, 0)
+          else
+            @patch['patcher']['lines'] << make_line(id, child_id)
+          end
         end
       end
 
@@ -46,15 +50,19 @@ module Maxy
         box = @library[:objects][node.name].dup
         box['id'] = id
         box['patching_rect'] = [OFFSET_X + (node.x_rank - 1) * STEP_X, OFFSET_Y + (node.y_rank - 1) * STEP_Y, box['width'] || WIDTH, box['height'] || HEIGHT]
-        unless box['text'].nil?
-          box['text'] += " #{node.args}"
-        end
+        box['text'] += " #{node.args}" unless box['text'].nil?
 
         box
       end
 
-      def make_line(parent_id, child_id)
-        { patchline: { destination: [child_id, 0], source: [parent_id, 0]} }
+      def make_line(parent_id, child_id, parent_outlet = 0, child_inlet = 0)
+        {
+          patchline:
+          {
+            destination: [child_id, child_inlet],
+            source: [parent_id, parent_outlet]
+          }
+        }
       end
 
       def align_tree(node, x_rank = 1, y_rank = 1)
@@ -71,6 +79,5 @@ module Maxy
         node
       end
     end
-
   end
 end
