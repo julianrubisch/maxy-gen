@@ -83,7 +83,15 @@ RSpec.describe Generator do
     generator = Generator.new
     generated = generator.generate(tree)
 
-    expect(JSON.parse(generated)['patcher']['boxes']).not_to be_empty
-  end
+    lines = JSON.parse(generated)['patcher']['lines']
 
+    expect(JSON.parse(generated)['patcher']['boxes']).not_to be_empty
+    expect(lines).not_to be_empty
+
+    expect(JSON.parse(generated)['patcher']['boxes'].size).to eq(4)
+    expect(lines.size).to eq(3)
+    expect(lines[0]['patchline']['source']).to eq(['obj_1', 0])
+    expect(lines[1]['patchline']['source']).to eq(['obj_1', 1])
+    expect(lines[2]['patchline']['source']).to eq(['obj_1', 2])
+  end
 end
