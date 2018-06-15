@@ -39,6 +39,7 @@ Use an [emmet](https://emmet.io/)-like pattern to generate a max patch, e.g.
 As of now you can use 
 
 - `-` dashes to indicate patch chords 
+- `=` equal signs to connect a row (as in t b b) to multiple objects at once
 - `{}` curly braces to denote arguments passed to objects
 - `+` to denote sibling objects
 - `(...)` to group objects together (see demo above)
