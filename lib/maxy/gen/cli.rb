@@ -55,7 +55,7 @@ module Maxy
           end
         end
 
-        library[:objects].select { |k,v| k.match?(/\A^[-+*{}].*/)  }.each do |k,v|
+        library[:objects].select { |k, _v| k.match?(/\A^[-+*={}()].*/) }.each do |k, _v|
           key = "\\#{k}"
           library[:objects][key] = library[:objects].delete k
         end

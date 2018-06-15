@@ -4,7 +4,9 @@ A commandline tool to generate max patches in an emmet-like fashion
 
 ![](https://s3.eu-central-1.amazonaws.com/maxy-gen/maxygen-demo-v0.3.0.gif)
 
-## Installation
+## Installation and Upgrading
+
+_Important! You have to repeat this procedure when upgrading!_
 
 Requires `ruby` installed, of course. This gem was built with v.2.3.3.
 
@@ -43,9 +45,11 @@ As of now you can use
 
 A couple of objects need escaping (with `\`), because some characters are taken, obviously. These are:
 
+- `\==`
 - `\-`
 - `\+`
 - `\*`
+- `\==~`
 - `\-~`
 - `\+=~`
 - `\+~`
