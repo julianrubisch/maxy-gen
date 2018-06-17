@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    maxy-gen (0.3.1)
+    maxy-gen (0.3.2)
       nokogiri
       thor
 
