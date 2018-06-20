@@ -3,6 +3,105 @@ require "spec_helper"
 include Maxy::Gen
 
 RSpec.describe Parser do
+  before(:each) do
+    allow(File).to receive(:exist?) { true }
+    allow(Psych).to receive(:load_file).with(/blank.yml/).and_return({ 'patcher' => { 'boxes' => [], 'lines' => [] } })
+    allow(Psych).to receive(:load_file).with(/library.yml/).and_return({ objects: {
+              'sig~' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'sig~',
+                numinlets: 1,
+                numoutlets: 1
+              },
+              '\*~' => {
+                maxclass: 'newobj',
+                style: '',
+                text: '*~',
+                numinlets: 2,
+                numoutlets: 1
+              },
+              'dac~' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'dac~',
+                numinlets: 2,
+                numoutlets: 0
+              },
+              'loadbang' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'loadbang',
+                numinlets: 0,
+                numoutlets: 1
+              },
+              'int' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'int',
+                numinlets: 2,
+                numoutlets: 1
+              },
+              'float' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'float',
+                numinlets: 2,
+                numoutlets: 1
+              },
+              'print' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'print',
+                numinlets: 1,
+                numoutlets: 0
+              },
+              '\*' => {
+                maxclass: 'newobj',
+                style: '',
+                text: '\*',
+                numinlets: 2,
+                numoutlets: 1
+              },
+              'outlet' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'outlet',
+                numinlets: 1,
+                numoutlets: 0
+              },
+              'trigger' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'trigger',
+                numinlets: 1,
+                numoutlets: 1
+              },
+              'inlet' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'inlet',
+                numinlets: 0,
+                numoutlets: 1
+              },
+              'cycle~' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'cycle~',
+                numinlets: 2,
+                numoutlets: 1
+              },
+              'route' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'route',
+                numinlets: 1,
+                numoutlets: 1
+              }
+          }
+      })
+  end
+
   it 'should parse a simple input string of type a-b-c' do
     tokens = [Token.new(:identifier, 'cycle~'),
               Token.new(:dash, '-'),
