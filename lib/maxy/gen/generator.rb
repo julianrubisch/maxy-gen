@@ -14,7 +14,7 @@ module Maxy
       attr_accessor :library
 
       def initialize
-        raise RuntimeError.new('No object definitions were found. please run `maxy-gen install` first') unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
+        raise 'No object definitions were found. please run `maxy-gen install` first' unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
 
         @object_count = 1
         @patch = Psych.load_file(File.join(__dir__, '../../../assets/blank.yml')).dup

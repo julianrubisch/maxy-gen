@@ -2,7 +2,7 @@ module Maxy
   module Gen
     class Parser
       def initialize(tokens)
-        raise RuntimeError.new('No object definitions were found. please run `maxy-gen install` first') unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
+        raise 'No object definitions were found. please run `maxy-gen install` first' unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
 
         @library = Psych.load_file("#{ENV['HOME']}/.maxy-gen/library.yml").freeze
         @tokens = tokens
@@ -13,7 +13,7 @@ module Maxy
       def parse(parent_node=@tree, closing_group=false)
         if closing_group
           if peek(:dash) || peek(:identifier) || peek(:escaped_identifier)
-            raise RuntimeError.new("Parsing Error: only + is allowed after a ) closing a group.")
+            raise 'Parsing Error: only + is allowed after a ) closing a group.'
           end
         else
           parse_begin_group parent_node
@@ -52,7 +52,7 @@ module Maxy
 
         arguments = parse_arguments || ''
 
-        raise RuntimeError.new("Could not find #{obj_name} in object definitions.") if @library[:objects][obj_name].nil?
+        raise "Could not find #{obj_name} in object definitions." if @library[:objects][obj_name].nil?
 
         new_obj_node = ObjectNode.new(obj_name, arguments, [])
         parent.child_nodes << new_obj_node
@@ -73,12 +73,12 @@ module Maxy
         if token.type == expected_type
           token
         else
-          raise RuntimeError.new("Expected token type #{expected_type.inspect}, but got #{token.type.inspect}")
+          raise "Expected token type #{expected_type.inspect}, but got #{token.type.inspect}"
         end
       end
 
       def peek(expected_type)
-        @tokens.length > 0 && @tokens.fetch(0).type == expected_type
+        @tokens.length.positive? && @tokens.fetch(0).type == expected_type
       end
 
       def parse_plus(obj_node)
@@ -118,6 +118,5 @@ module Maxy
       end
     end
     RootNode = Struct.new(:child_nodes)
-
   end
 end

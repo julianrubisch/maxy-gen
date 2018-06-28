@@ -2,15 +2,15 @@ module Maxy
   module Gen
     class Tokenizer
       TOKEN_TYPES = [
-          [:arguments, /({[^{}]*})/],
-          [:escaped_identifier, /(\\[\S][^-+={}<()\\]*)(?=[-+=*<{}])?/],
-          [:identifier, /([^-+={}<()\\]+)(?=[-+=*<{}])?/],
-          [:oparen, /(\()/],
-          [:cparen, /(\))/],
-          [:plus, /(\+)/],
-          [:less_than, /(<)/],
-          [:equals, /(=)/],
-          [:dash, /(-)/]
+        [:arguments, /({[^{}]*})/],
+        [:escaped_identifier, /(\\[\S][^-+={}<()\\]*)(?=[-+=*<{}])?/],
+        [:identifier, /([^-+={}<()\\]+)(?=[-+=*<{}])?/],
+        [:oparen, /(\()/],
+        [:cparen, /(\))/],
+        [:plus, /(\+)/],
+        [:less_than, /(<)/],
+        [:equals, /(=)/],
+        [:dash, /(-)/]
       ]
 
       def initialize(pattern)
@@ -35,7 +35,7 @@ module Maxy
           end
         end
 
-        raise RuntimeError.new "Couldn't match token on #{@pattern.inspect}"
+        raise "Couldn't match token on #{@pattern.inspect}"
       end
     end
 
