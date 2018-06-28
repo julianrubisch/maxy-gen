@@ -40,6 +40,10 @@ module Maxy
           generate_node(child_node, child_id)
           if node.flags.include? :connect_children_individually
             @patch['patcher']['lines'] << make_line(id, child_id, index, 0)
+          elsif node.flags.include? :connect_all_child_inlets
+            0.upto(child_node.args.split.count - 1) do |i|
+              @patch['patcher']['lines'] << make_line(id, child_id, 0, i)
+            end
           else
             @patch['patcher']['lines'] << make_line(id, child_id)
           end

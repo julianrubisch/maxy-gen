@@ -51,8 +51,8 @@ RSpec.describe Tokenizer do
   end
 
   it 'should tokenize a less than sign' do
-    tokens = Tokenizer.new('int{3}<select{1 2 3}').tokenize
+    tokens = Tokenizer.new('int{3}<pack{1 2 3}').tokenize
     expect(tokens.map(&:type)).to eq(%i[identifier arguments less_than identifier arguments])
-    expect(tokens.map(&:value)).to eq(%w[int {3} < select {1\ 2\ 3}])
+    expect(tokens.map(&:value)).to eq(%w[int {3} < pack {1\ 2\ 3}])
   end
 end

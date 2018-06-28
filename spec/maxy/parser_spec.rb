@@ -104,6 +104,13 @@ RSpec.describe Parser do
                 text: 'select',
                 numinlets: 1,
                 numoutlets: 1
+              },
+              'pack' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'pack',
+                numinlets: 1,
+                numoutlets: 1
               }
           }
       })
@@ -229,7 +236,7 @@ RSpec.describe Parser do
     tokens = [Token.new(:identifier, 'int'),
               Token.new(:arguments, '{3}'),
               Token.new(:less_than, '<'),
-              Token.new(:identifier, 'select'),
+              Token.new(:identifier, 'pack'),
               Token.new(:arguments, '{1\ 2\ 3}')]
     tree = Parser.new(tokens).parse
 

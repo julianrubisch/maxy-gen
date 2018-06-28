@@ -100,6 +100,13 @@ RSpec.describe Generator do
                   text: 'select',
                   numinlets: 1,
                   numoutlets: 1
+                },
+                'pack' => {
+                  maxclass: 'newobj',
+                  style: '',
+                  text: 'pack',
+                  numinlets: 1,
+                  numoutlets: 1
                 }
             }
         })
@@ -192,7 +199,7 @@ RSpec.describe Generator do
     it 'should connect to all child nodes if asked to do so' do
       tree = RootNode.new([
                               ObjectNode.new('int', '3', [
-                                  ObjectNode.new('select', '1 2 3', [])
+                                  ObjectNode.new('pack', '1 2 3', [])
                               ], 0, 0, [:connect_all_child_inlets])
                           ])
       generator = Generator.new
