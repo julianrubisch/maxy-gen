@@ -18,6 +18,7 @@ module Maxy
         else
           parse_begin_group parent_node
           child_node = parse_identifier parent_node
+          parse_less_than child_node
           parse_equals child_node
           parse_dash child_node
         end
@@ -98,6 +99,14 @@ module Maxy
         if peek(:equals)
           consume(:equals)
           obj_node.flags << :connect_children_individually
+          parse(obj_node)
+        end
+      end
+
+      def parse_less_than(obj_node)
+        if peek(:less_than)
+          consume(:less_than)
+          obj_node.flags << :connect_all_child_inlets
           parse(obj_node)
         end
       end
