@@ -93,6 +93,13 @@ RSpec.describe Generator do
                   text: 'inlet',
                   numinlets: 0,
                   numoutlets: 1
+                },
+                'select' => {
+                  maxclass: 'newobj',
+                  style: '',
+                  text: 'select',
+                  numinlets: 1,
+                  numoutlets: 1
                 }
             }
         })
@@ -180,6 +187,30 @@ RSpec.describe Generator do
         expect(lines[0]['patchline']['source']).to eq(['obj_1', 0])
         expect(lines[1]['patchline']['source']).to eq(['obj_1', 1])
         expect(lines[2]['patchline']['source']).to eq(['obj_1', 2])
+    end
+
+    it 'should connect to all child nodes if asked to do so' do
+      tree = RootNode.new([
+                              ObjectNode.new('int', '3', [
+                                  ObjectNode.new('select', '1 2 3', [])
+                              ], 0, 0, [:connect_all_child_inlets])
+                          ])
+      generator = Generator.new
+      generated = generator.generate(tree)
+
+      lines = JSON.parse(generated)['patcher']['lines']
+
+      expect(JSON.parse(generated)['patcher']['boxes']).not_to be_empty
+      expect(lines).not_to be_empty
+
+      expect(JSON.parse(generated)['patcher']['boxes'].size).to eq(2)
+      expect(lines.size).to eq(3)
+      expect(lines[0]['patchline']['source']).to eq(['obj_1', 0])
+      expect(lines[1]['patchline']['source']).to eq(['obj_1', 0])
+      expect(lines[2]['patchline']['source']).to eq(['obj_1', 0])
+      expect(lines[0]['patchline']['destination']).to eq(['obj_2', 0])
+      expect(lines[1]['patchline']['destination']).to eq(['obj_2', 1])
+      expect(lines[2]['patchline']['destination']).to eq(['obj_2', 2])
     end
   end
 end

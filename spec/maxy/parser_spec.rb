@@ -97,6 +97,13 @@ RSpec.describe Parser do
                 text: 'route',
                 numinlets: 1,
                 numoutlets: 1
+              },
+              'select' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'select',
+                numinlets: 1,
+                numoutlets: 1
               }
           }
       })
@@ -218,4 +225,16 @@ RSpec.describe Parser do
     expect(tree.child_nodes[0].child_nodes[2]).to eq(ObjectNode.new('int', '', [], 0, 0, []))
   end
 
+  it 'should parse a single to row expression' do
+    tokens = [Token.new(:identifier, 'int'),
+              Token.new(:arguments, '{3}'),
+              Token.new(:less_than, '<'),
+              Token.new(:identifier, 'select'),
+              Token.new(:arguments, '{1\ 2\ 3}')]
+    tree = Parser.new(tokens).parse
+
+    expect(tree.child_nodes[0].name).to eq('int')
+    expect(tree.child_nodes[0].flags).to include(:connect_all_child_inlets)
+    expect(tree.child_nodes[0].child_nodes.size).to eq(1)
+  end
 end
