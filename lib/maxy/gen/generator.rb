@@ -14,7 +14,7 @@ module Maxy
       attr_accessor :library
 
       def initialize
-        raise RuntimeError.new('No object definitions were found. please run `maxy-gen install` first') unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
+        raise 'No object definitions were found. please run `maxy-gen install` first' unless File.exist?("#{ENV['HOME']}/.maxy-gen/library.yml")
 
         @object_count = 1
         @patch = Psych.load_file(File.join(__dir__, '../../../assets/blank.yml')).dup
@@ -40,6 +40,10 @@ module Maxy
           generate_node(child_node, child_id)
           if node.flags.include? :connect_children_individually
             @patch['patcher']['lines'] << make_line(id, child_id, index, 0)
+          elsif node.flags.include? :connect_all_child_inlets
+            0.upto(child_node.args.split.count - 1) do |i|
+              @patch['patcher']['lines'] << make_line(id, child_id, 0, i)
+            end
           else
             @patch['patcher']['lines'] << make_line(id, child_id)
           end
