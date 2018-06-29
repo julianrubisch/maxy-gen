@@ -2,7 +2,7 @@
 
 A commandline tool to generate max patches in an emmet-like fashion
 
-![](https://s3.eu-central-1.amazonaws.com/maxy-gen/maxygen-demo-v0.3.0.gif)
+![](https://s3.eu-central-1.amazonaws.com/maxy-gen/maxygen-demo-v0.3.3.gif)
 
 ## Installation and Upgrading
 
