@@ -111,6 +111,20 @@ RSpec.describe Parser do
                 text: 'pack',
                 numinlets: 1,
                 numoutlets: 1
+              },
+              'mc.cycle~' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'mc.cycle~',
+                numinlets: 2,
+                numoutlets: 1
+              },
+              'mc.*~' => {
+                maxclass: 'newobj',
+                style: '',
+                text: 'mc.*~',
+                numinlets: 2,
+                numoutlets: 1
               }
           }
       })
@@ -243,5 +257,19 @@ RSpec.describe Parser do
     expect(tree.child_nodes[0].name).to eq('int')
     expect(tree.child_nodes[0].flags).to include(:connect_all_child_inlets)
     expect(tree.child_nodes[0].child_nodes.size).to eq(1)
+  end
+
+  it 'should parse a simple mc chain' do
+    tokens = [Token.new(:mc_identifier, 'mc.cycle~'),
+              Token.new(:arguments, '{440.}'),
+              Token.new(:dash, '-'),
+              Token.new(:mc_identifier, 'mc.*~'),
+              Token.new(:arguments, '{0.1}')]
+    tree = Parser.new(tokens).parse
+
+    expect(tree.child_nodes[0].name).to eq('mc.cycle~')
+    expect(tree.child_nodes[0].args).to eq('440.')
+    expect(tree.child_nodes[0].child_nodes[0].name).to eq('mc.*~')
+    expect(tree.child_nodes[0].child_nodes[0].args).to eq('0.1')
   end
 end

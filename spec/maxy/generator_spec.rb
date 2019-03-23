@@ -107,6 +107,20 @@ RSpec.describe Generator do
                   text: 'pack',
                   numinlets: 1,
                   numoutlets: 1
+                },
+                'mc.cycle~' => {
+                  maxclass: 'newobj',
+                  style: '',
+                  text: 'mc.cycle~',
+                  numinlets: 2,
+                  numoutlets: 1
+                },
+                'mc.*~' => {
+                  maxclass: 'newobj',
+                  style: '',
+                  text: 'mc.*~',
+                  numinlets: 2,
+                  numoutlets: 1
                 }
             }
         })

@@ -48,6 +48,8 @@ module Maxy
           obj_name = consume(:identifier).value
         elsif peek(:escaped_identifier)
           obj_name = consume(:escaped_identifier).value
+        elsif peek(:mc_identifier)
+          obj_name = consume(:mc_identifier).value
         end
 
         arguments = parse_arguments || ''
