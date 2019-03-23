@@ -55,4 +55,10 @@ RSpec.describe Tokenizer do
     expect(tokens.map(&:type)).to eq(%i[identifier arguments less_than identifier arguments])
     expect(tokens.map(&:value)).to eq(%w[int {3} < pack {1\ 2\ 3}])
   end
+
+  it 'should tokenize an mc chain' do
+    tokens = Tokenizer.new('mc.sig~{5.}-mc.+~{100}-mc.-~{50.}-mc./~{2}-mc.cycle~{440.}-mc.*~{0.1}').tokenize
+    expect(tokens.map(&:type)).to eq(%i[mc_identifier arguments dash mc_identifier arguments dash mc_identifier arguments dash mc_identifier arguments dash mc_identifier arguments dash mc_identifier arguments])
+    expect(tokens.map(&:value)).to eq(%w[mc.sig~ {5.} - mc.+~ {100} - mc.-~ {50.} - mc./~ {2} - mc.cycle~ {440.} - mc.*~ {0.1}])
+  end
 end

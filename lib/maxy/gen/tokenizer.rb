@@ -3,6 +3,7 @@ module Maxy
     class Tokenizer
       TOKEN_TYPES = [
         [:arguments, /({[^{}]*})/],
+        [:mc_identifier, /(mc\.[^{}()]+~)(?=[-+=*<{}])?/],
         [:escaped_identifier, /(\\[\S][^-+={}<()\\]*)(?=[-+=*<{}])?/],
         [:identifier, /([^-+={}<()\\]+)(?=[-+=*<{}])?/],
         [:oparen, /(\()/],
